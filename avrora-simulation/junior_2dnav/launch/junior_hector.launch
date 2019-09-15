@@ -1,0 +1,12 @@
+<launch>
+   <!-- move_base node -->
+   <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+      <rosparam file="$(find junior_2dnav)/config/dagny_nav.yaml" command="load" />
+      <rosparam file="$(find junior_2dnav)/config/teb_local_planner.yaml" command="load"/>
+      <param name="SBPLLatticePlanner/primitive_filename" value="$(find junior_2dnav)/primitives/dagny.mprim" />
+      <rosparam file="$(find junior_2dnav)/config/common_costmap.yaml" command="load" ns="local_costmap"/>
+      <rosparam file="$(find junior_2dnav)/config/local_costmap.yaml" command="load" ns="local_costmap"/>
+      <rosparam file="$(find junior_2dnav)/config/common_costmap.yaml" command="load" ns="global_costmap"/>
+      <rosparam file="$(find junior_2dnav)/config/global_costmap.yaml" command="load" ns="global_costmap"/>
+   </node>
+</launch>

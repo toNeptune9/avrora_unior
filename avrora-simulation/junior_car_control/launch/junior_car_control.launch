@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<launch>
+    <arg name="controllers" default="joint_state_controller pos_joint_trajectory_controller"/>
+    <!-- Loads joint controller configurations from YAML file to parameter server -->
+    <rosparam file="$(find junior_car_control)/config/junior_car.yaml" command="load" />
+    <!-- Loads the controllers -->
+    <node name="controller_spawner" pkg="controller_manager" type="spawner" ns="/junior_car" respawn="false" output="screen" args="$(arg controllers)" />
+    <!-- Converts joint states to TF transforms for rviz, etc -->
+    <node name="robot_joint_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="false" output="screen">
+        <remap from="joint_states" to="/junior_car/joint_states" />
+</node>
+</launch>

@@ -1,0 +1,16 @@
+material box
+{
+ receive_shadows on
+    technique
+    {
+		pass
+		{
+
+			texture_unit
+			{
+			        texture box_texture6.png
+							
+			}
+		}
+    }
+}

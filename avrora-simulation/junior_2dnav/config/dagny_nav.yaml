@@ -1,0 +1,17 @@
+base_global_planner: SBPLLatticePlanner
+recovery_behaviors:
+   [
+      {
+         name: conservative_reset,
+         type: clear_costmap_recovery/ClearCostmapRecovery,
+      },
+   ]
+planner_patience: 15.0
+clearing_rotation_allowed: false
+
+base_local_planner: teb_local_planner/TebLocalPlannerROS
+controller_frequency: 10.0
+
+SBPLLatticePlanner:
+   allocated_time: 15
+   initial_epsilon: 10.0

@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>junior_car_control</name>
+  <version>0.0.1</version>
+  <description>The junior_car_control package</description>
+
+  <maintainer email="ya.sagitov@gmail.com">Artur</maintainer>
+
+  <license>LGPL</license>
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>gazebo_ros</build_depend>
+  <build_depend>ros_control</build_depend>
+  <build_export_depend>gazebo_ros</build_export_depend>
+  <build_export_depend>ros_control</build_export_depend>
+  <exec_depend>gazebo_ros</exec_depend>
+  <exec_depend>ros_control</exec_depend>
+  <export>
+  </export>
+</package>

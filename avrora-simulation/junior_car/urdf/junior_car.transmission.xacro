@@ -1,0 +1,88 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+    <xacro:macro name="junior_transmission">
+        <transmission name="junior_car_tran_1">
+            <robotNamespace>/junior_car</robotNamespace>
+            <type>transmission_interface/SimpleTransmission</type>
+            <joint name="right_steer_joint">
+                <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            </joint>
+            <actuator name="junior_car_motor_1">
+                <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+                <mechanicalReduction>1</mechanicalReduction>
+            </actuator>
+        </transmission>
+
+        <transmission name="junior_car_tran_2">
+            <robotNamespace>/junior_car</robotNamespace>
+            <type>transmission_interface/SimpleTransmission</type>
+            <joint name="right_steer_wheel_joint">
+                <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            </joint>
+            <actuator name="junior_car_motor_2">
+                <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+                <mechanicalReduction>1</mechanicalReduction>
+            </actuator>
+        </transmission>
+
+        <transmission name="junior_car_tran_3">
+            <robotNamespace>/junior_car</robotNamespace>
+            <type>transmission_interface/SimpleTransmission</type>
+            <joint name="left_steer_joint">
+                <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            </joint>
+            <actuator name="junior_car_motor_3">
+                <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+                <mechanicalReduction>1</mechanicalReduction>
+            </actuator>
+        </transmission>
+
+        <transmission name="junior_car_tran_4">
+            <robotNamespace>/junior_car</robotNamespace>
+            <type>transmission_interface/SimpleTransmission</type>
+            <joint name="left_steer_wheel_joint">
+                <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            </joint>
+            <actuator name="junior_car_motor_4">
+                <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+                <mechanicalReduction>1</mechanicalReduction>
+            </actuator>
+        </transmission>
+
+        <transmission name="junior_car_tran_5">
+            <robotNamespace>/junior_car</robotNamespace>
+            <type>transmission_interface/SimpleTransmission</type>
+            <joint name="right_drive_wheel_joint">
+                <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            </joint>
+            <actuator name="junior_car_motor_5">
+                <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+                <mechanicalReduction>1</mechanicalReduction>
+            </actuator>
+        </transmission>
+
+        <transmission name="junior_car_tran_6">
+            <robotNamespace>/junior_car</robotNamespace>
+            <type>transmission_interface/SimpleTransmission</type>
+            <joint name="left_drive_wheel_joint">
+                <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            </joint>
+            <actuator name="junior_car_motor_6">
+                <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+                <mechanicalReduction>1</mechanicalReduction>
+            </actuator>
+        </transmission>
+
+        <transmission name="junior_car_tran_7">
+            <robotNamespace>/junior_car</robotNamespace>
+            <type>transmission_interface/SimpleTransmission</type>
+            <joint name="hokuyo_link">
+                <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            </joint>
+            <actuator name="junior_car_motor_7">
+                <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+                <mechanicalReduction>1</mechanicalReduction>
+            </actuator>
+        </transmission> 
+    </xacro:macro>
+</robot>

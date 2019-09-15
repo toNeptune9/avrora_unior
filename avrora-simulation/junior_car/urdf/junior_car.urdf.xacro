@@ -1,0 +1,523 @@
+<?xml version="1.0"?>
+<robot name="junior_car"
+  xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <xacro:include filename="$(find junior_car)/urdf/junior_car.gazebo.xacro" />
+  <!-- inertial macros -->
+  <xacro:include filename="$(find junior_car)/urdf/inertia.xacro" />
+  <!-- add transmissions -->
+  <xacro:include filename="$(find junior_car)/urdf/junior_car.transmission.xacro" />
+  
+  <link name="footprint">
+   </link>
+
+  <link name="base_link">
+    <visual>
+      <origin xyz="0 -0.02 0.165" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://junior_car/meshes/base_link.STL" />
+      </geometry>
+      <material name="">
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 -0.02 0.165" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://junior_car/meshes/base_link.STL"/>
+      </geometry>
+    </collision>
+    <xacro:box_inertial_origin x="${b_height}" y="${b_width}" z="${b_depth}" mass="${b_mass}" origin="0 -0.025 0.2" rpy="0 0 1.5708"/>
+  </link>
+  
+  <joint name="footprint_joint" type="fixed">
+     <parent link="footprint"/>
+     <child link="base_link"/>
+     <origin xyz="0 0 0.11" rpy="0 0 -1.5709" />
+   </joint>
+  
+  <link name="hokuyo_sensor">
+    <xacro:box_inertial x="${hokuyo_depth}" y="${hokuyo_depth}" z="${hokuyo_width}" mass="${hokuyo_mass}"/>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 -${pi/2} ${pi}" />
+      <geometry>
+        <mesh filename="package://junior_car/meshes/hokuyo_sensor.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.250980392156863 0.250980392156863 0.250980392156863 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 -${pi/2} ${pi}" />
+      <geometry>
+        <mesh filename="package://junior_car/meshes/hokuyo_sensor.STL" />
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="fake_laser">
+  </link>
+
+  <joint name="hokuyo_link" type="revolute">
+    <origin xyz="0 0.4 0.4" rpy="-${pi/12} 0 0" />
+    <parent link="base_link" />
+    <child link="hokuyo_sensor" />
+    <axis xyz="1 0 0" />
+    <limit lower="0" upper="0" effort="100" velocity="100" />
+  </joint>
+
+  <joint name="fake_laser_joint" type="fixed">
+    <origin xyz="0 0.4 0.4" rpy="0 0 0" />
+    <parent link="base_link" />
+    <child link="fake_laser" />
+    <axis xyz="1 0 0" />
+  </joint>
+
+  <link name="right_steer_link">
+    <inertial>
+      <origin xyz="0.045 0.027009 -5.33E-08" rpy="0 0 0" />
+      <mass value="0.23" />
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0" />
+    </inertial>
+    <visual>
+      <origin xyz="0.045 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://junior_car/meshes/steer_link.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.045 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://junior_car/meshes/steer_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="right_steer_joint" type="revolute">
+    <origin xyz="0.185 0.295 0.01925" rpy="${pi/2} 0 0" />
+    <parent link="base_link" />
+    <child link="right_steer_link" />
+    <axis xyz="0 1 0" />
+    <limit lower="-0.52" upper="0.52" effort="1000" velocity="2" />
+  </joint>
+
+  <link name="right_steer_wheel">
+    <xacro:cylinder_inertial radius="${wheel_radius}" length="${wheel_height}" mass="${wheel_mass}" origin="-0.0388 0 0" rpy="0 1.5708 0" />
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://junior_car/meshes/wheel.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://junior_car/meshes/wheel.STL" />
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="right_steer_wheel_joint" type="continuous">
+    <origin xyz="0.12105 0 0" rpy="${pi/2} 0 0" />
+    <parent link="right_steer_link" />
+    <child link="right_steer_wheel" />
+    <axis xyz="1 0 0" />
+  </joint>
+
+  <link name="left_steer_link">
+    <inertial>
+      <origin xyz="0.012461 -0.027009 7.3683E-10" rpy="0 0 0" />
+      <mass value="0.23" />
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0" />
+    </inertial>
+    <visual>
+      <origin xyz="-0.045 0 0" rpy="0 ${pi} 0" />
+      <geometry>
+        <mesh filename="package://junior_car/meshes/steer_link.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.75294 0 0 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="-0.045 0 0" rpy="0 ${pi} 0" />
+      <geometry>
+        <mesh filename="package://junior_car/meshes/steer_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="left_steer_joint" type="revolute">
+    <origin xyz="-0.190 0.295 0.01925" rpy="${pi/2} 0 0"/>
+    <parent link="base_link" />
+    <child link="left_steer_link" />
+    <axis xyz="0 1 0" />
+    <limit lower="-0.52" upper="0.52" effort="1000" velocity="2" />
+  </joint>
+
+  <link name="left_steer_wheel">
+    <xacro:cylinder_inertial radius="${wheel_radius}" length="${wheel_height}" mass="${wheel_mass}" origin="-0.0388 0 0" rpy="0 1.5709 0"/>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://junior_car/meshes/wheel.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://junior_car/meshes/wheel.STL" />
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="left_steer_wheel_joint" type="continuous">
+    <origin xyz="-0.11605 0 0" rpy="${pi/2} 0 ${pi}" />
+    <parent link="left_steer_link" />
+    <child link="left_steer_wheel" />
+    <axis xyz="1 0 0" />
+  </joint>
+
+  <link name="right_drive_wheel">
+    <inertial>
+      <origin xyz="-0.000354823432737794 7.56040584812268E-06 -7.98274668589727E-10" rpy="0 0 0" />
+      <mass value="0.9" />
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://junior_car/meshes/wheel.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.250980392156863 0.250980392156863 0.250980392156863 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://junior_car/meshes/wheel.STL" />
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="right_drive_wheel_joint" type="continuous">
+    <origin xyz="0.305 -0.39345 0.01345" rpy="0 0 0" />
+    <parent link="base_link" />
+    <child link="right_drive_wheel" />
+    <axis xyz="-1 0 0" />
+  </joint>
+
+  <link name="left_drive_wheel">
+    <inertial>
+      <origin xyz="-0.000354823420264383 9.98625522108387E-07 -2.1355551753921E-06" rpy="0 0 -${pi}" />
+      <mass value="0.9" />
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://junior_car/meshes/wheel.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.250980392156863 0.250980392156863 0.250980392156863 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://junior_car/meshes/wheel.STL" />
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="left_drive_wheel_joint" type="continuous">
+    <origin xyz="-0.305 -0.39345 0.01345" rpy="0.0 ${pi} 0" />
+    <parent link="base_link" />
+    <child link="left_drive_wheel" />
+    <axis xyz="1 0 0" />
+  </joint>
+
+  <link name="camera_link">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <box size = " ${kinect_depth} ${kinect_width} ${kinect_height}"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <box size = " ${kinect_depth} ${kinect_width} ${kinect_height}"/>
+      </geometry>
+    </collision>
+    <xacro:box_inertial x="${kinect_height}" y="${kinect_depth}" z="${kinect_width}" mass="${kinect_mass}"/>
+  </link>
+
+  <joint name="camera_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="camera_link"/>
+  <origin rpy="0 0 1.5709" xyz="0 0.43 0.235"/>
+  </joint>
+
+  <!-- L . SONAR 1. The left one -->
+  <link name="sonar_link">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <mass value="0.005" />
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="1.5709 0 -0.64" />
+      <geometry>
+        <cylinder radius="0.011" length="0.0009" />
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="1.5709 0 -0.64" />
+      <geometry>
+        <cylinder radius="0.011" length="0.0009" />
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="sonar_joint" type="fixed">
+    <origin xyz="0.283 0.487 0.057" rpy="0 0 0" />
+    <parent link="base_link" />
+    <child link="sonar_link" />
+    <axis xyz="0 1 0" />
+  </joint>
+
+
+  <!--R. SONAR 2. The right one. -->
+  <link name="2sonar_link">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <mass value="0.005" />
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0" />
+    </inertial>
+
+    <visual>
+      <origin xyz="0 0 0" rpy="1.5709 0 0.9" />
+      <geometry>
+        <cylinder radius="0.011" length="0.0009" />
+      </geometry>
+
+    </visual>
+
+    <collision>
+      <origin xyz="0 0 0" rpy="1.5709 0 0.9" />
+      <geometry>
+        <cylinder radius="0.011" length="0.0009" />
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="2sonar_joint" type="fixed">
+    <origin xyz="-0.3 0.473 0.055" rpy="0 0 0" />
+    <parent link="base_link" />
+    <child link="2sonar_link" />
+    <axis xyz="0 1 0" />
+  </joint>
+
+  <!-- CL. SONAR 3, The center left one. -->
+  <link name="3sonar_link">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <mass value="0.005" />
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="1.5709 0 0" />
+      <geometry>
+        <cylinder radius="0.011" length="0.0009" />
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="1.5709 0 0" />
+      <geometry>
+        <cylinder radius="0.011" length="0.0009" />
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="3sonar_joint" type="fixed">
+    <origin xyz="0.0931 0.532 0.055" rpy="0 0 0" />
+    <parent link="base_link" />
+    <child link="3sonar_link" />
+    <axis xyz="0 1 0" />
+  </joint>
+
+  <!-- CR. SONAR 4. The center right one -->
+  <link name="4sonar_link">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <mass value="0.005" />
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="1.5709 0 0" />
+      <geometry>
+        <cylinder radius="0.011" length="0.0009" />
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="1.5709 0 0" />
+      <geometry>
+        <cylinder radius="0.011" length="0.0009" />
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="4sonar_joint" type="fixed">
+    <origin xyz="-0.110 0.532 0.055" rpy="0 0 0" />
+    <parent link="base_link" />
+    <child link="4sonar_link" />
+    <axis xyz="0 1 0" />
+  </joint>
+
+  <!-- IMU LINK AND SENSOR -->
+  <link name="imu_link">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <mass value="0.005" />
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <box size="0.015 0.015 0.015" />
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <box size="0.015 0.015 0.015" />
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="imu_joint" type="fixed">
+    <origin xyz="0 -0.4 0.35" rpy="0 0 0" />
+    <parent link="base_link" />
+    <child link="imu_link" />
+    <axis xyz="0 0 0" />
+  </joint>
+
+  <link name="r1_sonar_link">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <mass value="0.005" />
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="1.5709 0 0" />
+      <geometry>
+        <cylinder radius="0.011" length="0.0009" />
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="1.5709 0 0" />
+      <geometry>
+        <cylinder radius="0.011" length="0.0009" />
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="r1_sonar_joint" type="fixed">
+    <origin xyz="0.127 -0.567 0.2" rpy="-0.3857178 0 0" />
+    <parent link="base_link" />
+    <child link="r1_sonar_link" />
+    <axis xyz="0 1 0" />
+  </joint>
+
+  <link name="r2_sonar_link">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <mass value="0.005" />
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="1.5709 0 0" />
+      <geometry>
+        <cylinder radius="0.011" length="0.0009" />
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="1.5709 0 0" />
+      <geometry>
+        <cylinder radius="0.011" length="0.0009" />
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="r2_sonar_joint" type="fixed">
+    <origin xyz="-0.127 -0.567 0.2" rpy="-0.3857178 0 0" />
+    <parent link="base_link" />
+    <child link="r2_sonar_link" />
+    <axis xyz="0 1 0" />
+  </joint>
+
+  <link name="r3_sonar_link">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <mass value="0.005" />
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="1.5709 0 0" />
+      <geometry>
+        <cylinder radius="0.011" length="0.0009" />
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="1.5709 0 0" />
+      <geometry>
+        <cylinder radius="0.011" length="0.0009" />
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="r3_sonar_joint" type="fixed">
+    <origin xyz="0.247 -0.575 0.135" rpy="-0.3857178 0 0.0623599" />
+    <parent link="base_link" />
+    <child link="r3_sonar_link" />
+    <axis xyz="0 1 0" />
+  </joint>
+
+  <link name="r4_sonar_link">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <mass value="0.005" />
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="1.5709 0 0" />
+      <geometry>
+        <cylinder radius="0.011" length="0.0009" />
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="1.5709 0 0" />
+      <geometry>
+        <cylinder radius="0.011" length="0.0009" />
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="r4_sonar_joint" type="fixed">
+    <origin xyz="-0.235 -0.577 0.135" rpy="-0.3857178 0 0.0623599" />
+    <parent link="base_link" />
+    <child link="r4_sonar_link" />
+    <axis xyz="0 1 0" />
+  </joint>
+
+  <xacro:junior_transmission/>
+</robot>
